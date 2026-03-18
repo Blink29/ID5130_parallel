@@ -1,4 +1,4 @@
-// q1b.cpp - Monte Carlo Integration (Serial + OpenMP Parallel)
+// Monte Carlo Integration (Serial + OpenMP Parallel)
 // Integral: I = ∫₀⁴∫₀³∫₀² (4x³ + xy² + 5y + yz + 6z) dz dy dx
 //
 // Compile serial:   g++ -O2 q1b.cpp -o q1b_serial

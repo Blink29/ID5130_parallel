@@ -1,4 +1,4 @@
-// q1a.cpp - Riemann Integration (Serial + OpenMP Parallel)
+// Riemann Integration (Serial + OpenMP Parallel)
 // Integral: I = ∫₀⁴∫₀³∫₀² (4x³ + xy² + 5y + yz + 6z) dz dy dx
 //
 // Compile serial:   g++ -O2 q1a.cpp -o q1a_serial
@@ -60,7 +60,7 @@ int main() {
     clock_t t_start = clock();
 #endif
 
-    // Riemann sum: use midpoint rule for better accuracy
+    // Riemann sum: using midpoint rule for better accuracy
     // x*_ijk = X_MIN + (i + 0.5) * dx, etc.
 #pragma omp parallel for reduction(+:sum) collapse(3)
     for (int i = 0; i < Nx; i++) {

@@ -1,4 +1,4 @@
-// q2c.cpp - Jacobi Solver for Poisson Equation (Serial + OpenMP Parallel)
+// Jacobi Solver for Poisson Equation (Serial + OpenMP Parallel)
 // Part (b): OpenMP Jacobi program
 // Part (c): Verification + Timing for Δ = 0.1, 0.01, 0.005
 //
@@ -12,7 +12,7 @@
 #include <fstream>
 #include <cmath>
 #include <vector>
-#include <ctime>
+#include <chrono>
 
 #ifdef _OPENMP
 #include <omp.h>
@@ -47,11 +47,11 @@ int jacobi_solve(double delta, double &elapsed_time,
     int iter = 0;
     int converged_flag = 0;
 
-    // Start timing
+    // Start timing: chrono for serial build, omp_get_wtime for OpenMP build
 #ifdef _OPENMP
     double t_start = omp_get_wtime();
 #else
-    clock_t t_start = clock();
+    auto t_start = chrono::steady_clock::now();
 #endif
 
     for (iter = 1; iter <= max_iter; iter++) {
@@ -94,13 +94,13 @@ int jacobi_solve(double delta, double &elapsed_time,
         if (converged_flag) break;
     }
 
-    // End timing
+    // End timing: chrono for serial build, omp_get_wtime for OpenMP build
 #ifdef _OPENMP
     double t_end = omp_get_wtime();
     elapsed_time = t_end - t_start;
 #else
-    clock_t t_end = clock();
-    elapsed_time = (double)(t_end - t_start) / CLOCKS_PER_SEC;
+    auto t_end = chrono::steady_clock::now();
+    elapsed_time = chrono::duration<double>(t_end - t_start).count();
 #endif
 
     phi_out = phi;
@@ -170,6 +170,10 @@ int main() {
     }
 
     outfile.close();
-    cout << "Data written to q2c_data.txt" << endl;
+#ifdef _OPENMP
+    cout << "Data written to q2c_parallel_data.txt" << endl;
+#else
+    cout << "Data written to q2c_serial_data.txt" << endl;
+#endif
     return 0;
 }

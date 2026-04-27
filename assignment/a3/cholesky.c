@@ -58,12 +58,9 @@ void cholesky_serial(TYPE *a, int n)
  * elements in a column can be computed independently.
  *
  * Optimizations:
- *   - Data transfer: single #pragma acc data copy around entire
- *     computation, so data is only transferred to/from the GPU once.
- *   - Parallelism: off-diagonal elements in each column are independent,
- *     parallelized with #pragma acc parallel loop.
- *   - num_gangs: adapted per column based on available iterations,
- *     capped at 128 to balance work distribution vs launch overhead.
+ *   - Data transfer: single #pragma acc data copy around entire computation, so data is only transferred to/from the GPU once.
+ *   - Parallelism: off-diagonal elements in each column are independent, parallelized with #pragma acc parallel loop.
+ *   - num_gangs: adapted per column based on available iterations, capped at 128 to balance work distribution vs launch overhead.
  */
 void cholesky_parallel(TYPE * restrict a, int n)
 {
